@@ -6,16 +6,15 @@ engine = create_engine('sqlite:///database.db')
 Session = sessionmaker(bind=engine)
 
 
-class Livro(Base):  # Renomeado para Livro (singular)
-    __tablename__ = 'livros'  # Renomeado para letras minúsculas e plural
+class Livro(Base):
+    __tablename__ = 'livros'
     id = Column(Integer, primary_key=True)
-    titulo = Column(String(200), nullable=False)  # Adicionado tamanho máximo
-    autor = Column(String(100), nullable=False)  # Adicionado tamanho máximo
-    descricao = Column(String(500), nullable=False)  # Adicionado tamanho máximo
-    categoria = Column(String(50), nullable=False)  # Adicionado tamanho máximo
+    titulo = Column(String(200), nullable=False)
+    autor = Column(String(100), nullable=False)
+    descricao = Column(String(500), nullable=False)
+    categoria = Column(String(50), nullable=False)
 
     def serialize(self):
-        """Converte o objeto Livro em um dicionário."""
         try:
             dados = {
                 "titulo": self.titulo,
@@ -26,7 +25,26 @@ class Livro(Base):  # Renomeado para Livro (singular)
             return dados
         except Exception as e:
             print(f"Erro ao serializar o livro: {e}")
-            return None  # Ou levante a exceção, dependendo do seu caso de uso
+            return None
+
+class Nome(Base):
+    __tablename__ = 'Nomes'
+    id = Column(Integer, primary_key=True)
+    nome = Column(String(200), nullable=False)
+    profissao = Column(String(200), nullable=False)
+    salario = Column(String(200), nullable=False)
 
 
-Base.metadata.create_all(engine)  # Cria as tabelas
+    def serialize(self):
+        try:
+            dados = {
+                "nome": self.nome,
+                "profissao": self.profissao,
+                "salario": self.salario,
+            },
+            return dados
+        except Exception as e:
+            print(f"Erro ao serializar o Pessoa: {e}")
+            return None
+
+Base.metadata.create_all(engine)

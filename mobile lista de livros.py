@@ -1,12 +1,8 @@
 import flet as ft
 from flet import *
-from models import Livro
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from models import *
 
-# Configuração do banco de dados
-engine = create_engine('sqlite:///database.db')
-Session = sessionmaker(bind=engine)
+
 
 def main(page: ft.Page):
     page.title = "Exemplo de Rotas"
@@ -28,7 +24,7 @@ def main(page: ft.Page):
                     descricao=input_descricao.value
                 )
                 session.add(obj_livro)
-                session.commit()  # Salva no banco de dados
+                session.commit()
                 input_livro.value = ""
                 input_autor.value = ""
                 input_categoria.value = ""
@@ -36,12 +32,12 @@ def main(page: ft.Page):
                 page.overlay.append(msg_sucesso)
                 msg_sucesso.open = True
                 page.update()
-                exibir_lista()  # Atualiza a lista após salvar
+                exibir_lista()
 
     def exibir_lista():
         lv_livros.controls.clear()
         with Session() as session:
-            livros = session.query(Livro).all()  # Busca todos os livros do banco de dados
+            livros = session.query(Livro).all()
             for livro in livros:
                 lv_livros.controls.append(
                     ft.ListTile(
